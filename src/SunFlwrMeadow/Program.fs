@@ -1,57 +1,53 @@
-﻿namespace MeadowApp
+﻿namespace SunFlwrMeadow
 
 open System
-open Meadow.Devices
 open Meadow
-open Meadow.Foundation.Leds
-open Meadow.Foundation
-open Meadow.Peripherals.Leds
+open Meadow.Devices
+open Meadow.Foundation.Sensors.Motion
 open System.Threading.Tasks
+open Meadow.Hardware
+open Meadow.Units
 
 type MeadowApp() =
     // Change F7FeatherV2 to F7FeatherV1 for V1.x boards
     inherit App<F7FeatherV2>()
 
-    let mutable led : RgbPwmLed = null
-
-    let ShowColorPulse (color : Color) (duration : TimeSpan) = async {
-        do! led.StartPulse(color, TimeSpan.FromMilliseconds(500.0)) |> Async.AwaitTask
-        do! Async.Sleep duration
-        do! led.StopAnimation() |> Async.AwaitTask
-    }
-    
-    let CycleColors (duration : TimeSpan) = async {
-        do Resolver.Log.Info "Cycle colors..."
-
-        while true do
-            do! ShowColorPulse Color.Blue duration 
-            do! ShowColorPulse Color.Cyan duration
-            do! ShowColorPulse Color.Green duration
-            do! ShowColorPulse Color.GreenYellow duration
-            do! ShowColorPulse Color.Yellow duration
-            do! ShowColorPulse Color.Orange duration
-            do! ShowColorPulse Color.OrangeRed duration
-            do! ShowColorPulse Color.Red duration
-            do! ShowColorPulse Color.MediumVioletRed duration
-            do! ShowColorPulse Color.Purple duration
-            do! ShowColorPulse Color.Magenta duration
-            do! ShowColorPulse Color.Pink duration
-    }
+    let mutable Accelerometer : Adxl345 = null
+    let mutable accelerometerData : Acceleration3D = Acceleration3D()
 
     override this.Initialize() =
-        do Resolver.Log.Info "Initialize... (F#)"
-
-        led <- new RgbPwmLed(
-            MeadowApp.Device.Pins.OnboardLedRed,
-            MeadowApp.Device.Pins.OnboardLedGreen, 
-            MeadowApp.Device.Pins.OnboardLedBlue, 
-            CommonType.CommonAnode)
-
-        base.Initialize()
+        Resolver.Log.Info("Initialize...")
         
-    override this.Run () : Task =
-        let runAsync = async {
-            do Resolver.Log.Info "Run... (F#)"
-            do! CycleColors(TimeSpan.FromSeconds(1.0))
-        }
-        Async.StartAsTask(runAsync) :> Task
+        let i2cBus = MeadowApp.Device.CreateI2cBus(I2cBusSpeed.Standard)
+
+        // Create a new ADXL345 sensor on the I2C bus
+        Accelerometer <- new Adxl345(i2cBus)
+        Accelerometer.SetPowerState(false, false, true, false, Adxl345.Frequencies.FourHz)
+
+        // classical .NET events can also be used:
+        Accelerometer.Updated.Add(fun args ->
+            accelerometerData <- args.New
+            Resolver.Log.Info(
+                sprintf "Accel: [X:%f, Y:%f, Z:%f (m/s^2)]" 
+                        accelerometerData.X.MetersPerSecondSquared 
+                        accelerometerData.Y.MetersPerSecondSquared 
+                        accelerometerData.Z.MetersPerSecondSquared
+            )
+        )
+
+        Task.CompletedTask
+
+    override this.Run() =
+        async {
+            let updatingTask = async { Accelerometer.StartUpdating(TimeSpan.FromMilliseconds(250.0)) }
+            
+            // Use do! to handle the result of Async.StartImmediate
+            do! updatingTask
+
+            Resolver.Log.Info(
+                sprintf "Final Accel: [X:%f, Y:%f, Z:%f (m/s^2)]" 
+                        accelerometerData.X.MetersPerSecondSquared 
+                        accelerometerData.Y.MetersPerSecondSquared 
+                        accelerometerData.Z.MetersPerSecondSquared
+            )
+        } |> Async.StartAsTask :> Task
