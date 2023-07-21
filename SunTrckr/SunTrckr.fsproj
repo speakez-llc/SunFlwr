@@ -6,6 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Class1.fs" />
+    <None Include="scratches\scratch.fsx" />
+    <None Include="scratches\scratch_2.fsx" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Meadow.Foundation" Version="*" />
