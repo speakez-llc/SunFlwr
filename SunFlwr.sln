@@ -5,27 +5,26 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{57BBBF07-35B3-4CEF-80C9-D729C3193FA7}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SunFlwrMeadow", "src\SunFlwrMeadow\SunFlwrMeadow.fsproj", "{FABA5B42-07A5-4FBF-9374-0A8DC7634D15}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SunFlwrMeadow", "src\SunFlwrMeadow\SunFlwrMeadow.fsproj", "{FABA5B42-07A5-4FBF-9374-0A8DC7634D15}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SunFlwrXPlat", "SunFlwrXPlat", "{DD8E4B1F-3922-4828-87BE-A966F612EE08}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SunFlwrXPlat", "src\SunFlwrXPlat\SunFlwrXPlat\SunFlwrXPlat.fsproj", "{17683840-09B4-4A32-A20E-F8B9F1246EE2}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SunFlwrXPlat", "src\SunFlwrXPlat\SunFlwrXPlat\SunFlwrXPlat.fsproj", "{17683840-09B4-4A32-A20E-F8B9F1246EE2}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SunFlwrXPlat.Android", "src\SunFlwrXPlat\SunFlwrXPlat.Android\SunFlwrXPlat.Android.fsproj", "{126CC4A0-5F1C-4E32-BC0F-51867683870B}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SunFlwrXPlat.Android", "src\SunFlwrXPlat\SunFlwrXPlat.Android\SunFlwrXPlat.Android.fsproj", "{126CC4A0-5F1C-4E32-BC0F-51867683870B}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SunFlwrXPlat.Browser", "src\SunFlwrXPlat\SunFlwrXPlat.Browser\SunFlwrXPlat.Browser.fsproj", "{94D85C46-C850-432B-843F-67990478A210}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SunFlwrXPlat.Browser", "src\SunFlwrXPlat\SunFlwrXPlat.Browser\SunFlwrXPlat.Browser.fsproj", "{94D85C46-C850-432B-843F-67990478A210}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SunFlwrXPlat.Desktop", "src\SunFlwrXPlat\SunFlwrXPlat.Desktop\SunFlwrXPlat.Desktop.fsproj", "{0A0DA0C9-485D-444B-9600-86EAF2BD8CCA}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SunFlwrXPlat.Desktop", "src\SunFlwrXPlat\SunFlwrXPlat.Desktop\SunFlwrXPlat.Desktop.fsproj", "{0A0DA0C9-485D-444B-9600-86EAF2BD8CCA}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SunFlwrXPlat.iOS", "src\SunFlwrXPlat\SunFlwrXPlat.iOS\SunFlwrXPlat.iOS.fsproj", "{CD337D0F-A78D-4881-A414-94D550B3232F}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SunFlwrXPlat.iOS", "src\SunFlwrXPlat\SunFlwrXPlat.iOS\SunFlwrXPlat.iOS.fsproj", "{CD337D0F-A78D-4881-A414-94D550B3232F}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SunTrckr", "SunTrckr\SunTrckr.fsproj", "{08431836-71EF-424A-9AAF-940CD4ADF43B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FABA5B42-07A5-4FBF-9374-0A8DC7634D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -52,6 +51,15 @@ Global
 		{CD337D0F-A78D-4881-A414-94D550B3232F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD337D0F-A78D-4881-A414-94D550B3232F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD337D0F-A78D-4881-A414-94D550B3232F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08431836-71EF-424A-9AAF-940CD4ADF43B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08431836-71EF-424A-9AAF-940CD4ADF43B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08431836-71EF-424A-9AAF-940CD4ADF43B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{08431836-71EF-424A-9AAF-940CD4ADF43B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08431836-71EF-424A-9AAF-940CD4ADF43B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08431836-71EF-424A-9AAF-940CD4ADF43B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FABA5B42-07A5-4FBF-9374-0A8DC7634D15} = {57BBBF07-35B3-4CEF-80C9-D729C3193FA7}
@@ -61,5 +69,8 @@ Global
 		{94D85C46-C850-432B-843F-67990478A210} = {DD8E4B1F-3922-4828-87BE-A966F612EE08}
 		{0A0DA0C9-485D-444B-9600-86EAF2BD8CCA} = {DD8E4B1F-3922-4828-87BE-A966F612EE08}
 		{CD337D0F-A78D-4881-A414-94D550B3232F} = {DD8E4B1F-3922-4828-87BE-A966F612EE08}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {837009C8-06F9-48BD-8F05-263AFA0E701F}
 	EndGlobalSection
 EndGlobal
