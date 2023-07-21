@@ -14,7 +14,6 @@ type MeadowApp() =
 
     let mutable Accelerometer : Adxl345 = null
     let mutable accelerometerData : Acceleration3D = Acceleration3D()
-
     let mutable boardYoffset = 0.0
     let mutable boardYangle = 0.0
 
