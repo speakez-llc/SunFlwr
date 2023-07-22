@@ -23,10 +23,19 @@ type MeadowApp() =
         let i2cBus = MeadowApp.Device.CreateI2cBus(I2cBusSpeed.Standard)
         Accelerometer <- new Adxl345(i2cBus)
         Accelerometer.SetPowerState(false, false, true, false, Adxl345.Frequencies.FourHz)
+
+        // find the initial fractional degree position of the board to
+        // compensate relative to new changes when the panel is repositioned
         let offsetResult = Async.AwaitTask (Accelerometer.Read())
         accelerometerData <- Async.RunSynchronously offsetResult
         boardYoffset <- calculateAccYangle accelerometerData.X accelerometerData.Z
-        Resolver.Log.Info(sprintf "Y offset: %.1f%%" boardYoffset)
+        match boardYoffset with 
+            | x when x > -2.0 && x < 2.0 ->
+                boardYoffset <- x
+                Resolver.Log.Info(sprintf "Y offset: %.1f%%" boardYoffset)
+            | _ -> 
+                failwith $"Intiial angle out of range. [{boardYoffset}]" 
+        
         
         Task.CompletedTask
 
