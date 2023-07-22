@@ -29,11 +29,14 @@ type MeadowApp() =
         let offsetResult = Async.AwaitTask (Accelerometer.Read())
         accelerometerData <- Async.RunSynchronously offsetResult
         boardYoffset <- calculateAccYangle accelerometerData.X accelerometerData.Z
+        
         match boardYoffset with 
             | x when x > -2.0 && x < 2.0 ->
+                // set "offset" if board is between +/- 2 degrees of level
                 boardYoffset <- x
                 Resolver.Log.Info(sprintf "Y offset: %.1f%%" boardYoffset)
             | _ -> 
+                // otherwise exit
                 failwith $"Intiial angle out of range. [{boardYoffset}]" 
         
         
