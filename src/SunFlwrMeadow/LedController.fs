@@ -10,7 +10,6 @@ type ILedController =
     abstract member TurnOff : unit -> unit
     abstract member StartBlink : unit -> unit
     abstract member StartRunningColors : unit -> unit
-    abstract member getRandomColor : unit -> RgbLedColors
 
 type LedController(rgbLed: RgbLed) =
     let mutable cts = new CancellationTokenSource()
