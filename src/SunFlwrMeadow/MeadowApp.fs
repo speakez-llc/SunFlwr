@@ -35,11 +35,11 @@ type MeadowApp() =
         let Name = "MeadowRGB"
         let uuid: uint16 = 180us
         let onCharacteristic =
-            CharacteristicString("On", 
+            CharacteristicInt32("On", 
                             "73cfbc6f61fa4d80a92feec2a90f8a3e",
                             CharacteristicPermission.Read ||| CharacteristicPermission.Write,
                             CharacteristicProperty.Read ||| CharacteristicProperty.Write,
-                            10,[||])
+                            [||])
 
         let offCharacteristic =
             CharacteristicBool("Off", "6315119dd61949bba21def9e99941948",
@@ -47,10 +47,10 @@ type MeadowApp() =
                            CharacteristicProperty.Read ||| CharacteristicProperty.Write)
 
         let startBlinkCharacteristic =
-            CharacteristicString("StartBlink", "3a6cc4f2a6ab4709a9bfc9611c6bf892",
+            CharacteristicInt32("StartBlink", "3a6cc4f2a6ab4709a9bfc9611c6bf892",
                            CharacteristicPermission.Read ||| CharacteristicPermission.Write,
                            CharacteristicProperty.Read ||| CharacteristicProperty.Write,
-                           10,[||])
+                           [||])
 
         let startRunningColorsCharacteristic =
             CharacteristicBool("StartRunningColors", "30df1258f42b4788af2ea8ed9d0b932f",
@@ -94,25 +94,25 @@ type MeadowApp() =
         
         On.add_ValueSet(fun (sender : ICharacteristic) (newValue : obj) ->
             match newValue with
-            | :? string as "0" -> ledController.TurnOn(Some RgbLedColors.Red)
-            | :? string as "1" -> ledController.TurnOn(Some RgbLedColors.Green)
-            | :? string as "2" -> ledController.TurnOn(Some RgbLedColors.Blue)
-            | :? string as "3" -> ledController.TurnOn(Some RgbLedColors.Cyan)
-            | :? string as "4" -> ledController.TurnOn(Some RgbLedColors.Magenta)
-            | :? string as "5" -> ledController.TurnOn(Some RgbLedColors.Yellow)
-            | :? string as "6" -> ledController.TurnOn(Some RgbLedColors.White)
+            | :? int as 0 -> ledController.TurnOn(Some RgbLedColors.Red)
+            | :? int as 1 -> ledController.TurnOn(Some RgbLedColors.Green)
+            | :? int as 2 -> ledController.TurnOn(Some RgbLedColors.Blue)
+            | :? int as 3 -> ledController.TurnOn(Some RgbLedColors.Cyan)
+            | :? int as 4 -> ledController.TurnOn(Some RgbLedColors.Magenta)
+            | :? int as 5 -> ledController.TurnOn(Some RgbLedColors.Yellow)
+            | :? int as 6 -> ledController.TurnOn(Some RgbLedColors.White)
             | _ -> ledController.TurnOn(None) 
         )
         Off.add_ValueSet(fun sender args -> ledController.TurnOff())
         StartBlink.add_ValueSet(fun (sender : ICharacteristic) (newValue : obj) ->
                    match newValue with
-                   | :? string as "0" -> ledController.StartBlink(Some RgbLedColors.Red)
-                   | :? string as "1" -> ledController.StartBlink(Some RgbLedColors.Green)
-                   | :? string as "2" -> ledController.StartBlink(Some RgbLedColors.Blue)
-                   | :? string as "3" -> ledController.StartBlink(Some RgbLedColors.Cyan)
-                   | :? string as "4" -> ledController.StartBlink(Some RgbLedColors.Magenta)
-                   | :? string as "5" -> ledController.StartBlink(Some RgbLedColors.Yellow)
-                   | :? string as "6" -> ledController.StartBlink(Some RgbLedColors.White)
+                   | :? int as 0 -> ledController.StartBlink(Some RgbLedColors.Red)
+                   | :? int as 1 -> ledController.StartBlink(Some RgbLedColors.Green)
+                   | :? int as 2 -> ledController.StartBlink(Some RgbLedColors.Blue)
+                   | :? int as 3 -> ledController.StartBlink(Some RgbLedColors.Cyan)
+                   | :? int as 4 -> ledController.StartBlink(Some RgbLedColors.Magenta)
+                   | :? int as 5 -> ledController.StartBlink(Some RgbLedColors.Yellow)
+                   | :? int as 6 -> ledController.StartBlink(Some RgbLedColors.White)
                    | _ -> ledController.StartBlink(None) 
                )
         StartRunningColors.add_ValueSet(fun sender args -> ledController.StartRunningColors())
