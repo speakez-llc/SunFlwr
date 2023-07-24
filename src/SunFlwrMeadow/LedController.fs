@@ -13,11 +13,18 @@ type ILedController =
     abstract member getRandomColor : unit -> RgbLedColors
 
 type LedController(rgbLed: RgbLed) =
-    let mutable cancellationTokenSource = new CancellationTokenSource()
+    let mutable cts = new CancellationTokenSource()
+
+    let resetCancellationTokenSource () =
+        let newCancellationTokenSource = new CancellationTokenSource()
+        cts.Dispose() // Dispose the old instance
+        cts <- newCancellationTokenSource 
 
     let stop () =
         rgbLed.StopAnimation() |> ignore
-        cancellationTokenSource.Cancel()
+        cts.Cancel()
+        Thread.Sleep(500) // Give the StartRunningColors task time to stop
+        resetCancellationTokenSource()
 
     member private this.Initialize () =
         rgbLed.SetColor(RgbLedColors.White)
@@ -66,12 +73,9 @@ type LedController(rgbLed: RgbLed) =
 
     member this.StartRunningColors () =
         async {
-            while true do
-                if cancellationTokenSource.IsCancellationRequested then
-                    return ()
-
+            while not (cts.Token.IsCancellationRequested) do
                 rgbLed.SetColor(this.getRandomColor())
-                do! Task.Delay(1000) |> Async.AwaitTask
+                do! Task.Delay(500) |> Async.AwaitTask
         } |> Async.StartImmediate
         
     static member Create (rgbLed: RgbLed) =
