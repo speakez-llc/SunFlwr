@@ -10,7 +10,9 @@
     <None Include="app.config.yaml" />
     <None Include="wifi.config.yaml" />
     <Compile Include="Helpers.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="LedController.fs" />
+    <Compile Include="MeadowApp.fs" />
+
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.0" />

@@ -1,4 +1,4 @@
-﻿namespace MeadowApp
+﻿namespace SunFlwrMeadow.LedController
 
 open System
 open System.Threading
@@ -10,29 +10,21 @@ type ILedController =
     abstract member TurnOff : unit -> unit
     abstract member StartBlink : unit -> unit
     abstract member StartRunningColors : unit -> unit
+    abstract member getRandomColor : unit -> RgbLedColors
 
-type LedController (app: MeadowApp) =
-    let rgbLed =
-        RgbLed(app.Device.Pins.OnboardLedRed, app.Device.Pins.OnboardLedGreen, app.Device.Pins.OnboardLedBlue)
+type LedController(rgbLed: RgbLed) =
     let mutable cancellationTokenSource = new CancellationTokenSource()
 
     let stop () =
         rgbLed.StopAnimation() |> ignore
         cancellationTokenSource.Cancel()
-        
-    // Private method to initialize the LED controller
+
     member private this.Initialize () =
         rgbLed.SetColor(RgbLedColors.White)
         rgbLed.IsOn <- true
         stop()
 
-    // Factory method to create an instance of LedController
-    static member Create (app: MeadowApp) =
-        let ledController = LedController(app)
-        ledController.Initialize()
-        ledController
-    
-    member this.getRandomColor () =
+    member private this.getRandomColor () =
         let random = Random()
         let color : RgbLedColors =
             match random.Next(0, 6) with
@@ -46,28 +38,43 @@ type LedController (app: MeadowApp) =
         rgbLed.SetColor(color)
         color
 
-    member this.SetColor (color) =
-        stop()
-        rgbLed.SetColor(color)
-
-    member this.TurnOn () =
-        stop()
-        rgbLed.SetColor(this.getRandomColor())
-        rgbLed.IsOn <- true
+    member this.TurnOn (color: RgbLedColors option) =
+        match color with
+            | Some color ->
+                stop()
+                rgbLed.SetColor(color)
+                rgbLed.IsOn <- true
+            | None ->
+                stop()
+                rgbLed.SetColor(this.getRandomColor())
+                rgbLed.IsOn <- true
 
     member this.TurnOff () =
         stop()
         rgbLed.IsOn <- false
 
-    member this.StartBlink () =
-        rgbLed.StartBlink(this.getRandomColor())
+    member this.StartBlink (color: RgbLedColors option) =
+        match color with
+        | Some color ->
+            stop()
+            rgbLed.StartBlink(color) |> ignore
+            rgbLed.IsOn <- true
+        | None ->
+            stop()
+            rgbLed.StartBlink(this.getRandomColor()) |> ignore
+            rgbLed.IsOn <- true
 
-    member this.StartRunningColors (cancellationToken: CancellationToken) =
+    member this.StartRunningColors () =
         async {
             while true do
-                if cancellationToken.IsCancellationRequested then
+                if cancellationTokenSource.IsCancellationRequested then
                     return ()
 
                 rgbLed.SetColor(this.getRandomColor())
                 do! Task.Delay(1000) |> Async.AwaitTask
-        }
+        } |> Async.StartImmediate
+        
+    static member Create (rgbLed: RgbLed) =
+        let ledController = LedController(rgbLed)
+        ledController.Initialize()
+        ledController

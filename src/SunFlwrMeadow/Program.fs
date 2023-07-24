@@ -7,6 +7,7 @@ open Meadow.Devices
 open Meadow.Hardware
 open Meadow.Foundation.Sensors.Motion
 open Meadow.Units
+open Meadow.Foundation.Leds
 open Helpers
 
 type MeadowApp() =
@@ -39,7 +40,7 @@ type MeadowApp() =
                 // otherwise exit
                 failwith $"Intiial angle out of range. [{boardYoffset}]" 
         
-        
+
         Task.CompletedTask
 
     override this.Run() =
