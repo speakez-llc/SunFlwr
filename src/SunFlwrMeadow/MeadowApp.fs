@@ -40,27 +40,22 @@ type MeadowApp() =
                             "73cfbc6f61fa4d80a92feec2a90f8a3e",
                             CharacteristicPermission.Write,
                             CharacteristicProperty.Write)
-
         let offCharacteristic =
             CharacteristicBool("Off", "6315119dd61949bba21def9e99941948",
                            CharacteristicPermission.Write,
                            CharacteristicProperty.Write)
-
         let startBlinkCharacteristic =
             CharacteristicInt32("StartBlink", "3a6cc4f2a6ab4709a9bfc9611c6bf892",
                            CharacteristicPermission.Write,
                            CharacteristicProperty.Write)
-
         let startRunningColorsCharacteristic =
             CharacteristicBool("StartRunningColors", "30df1258f42b4788af2ea8ed9d0b932f",
                            CharacteristicPermission.Write,
                            CharacteristicProperty.Write)
-
         let readAngleCharacteristic =
             CharacteristicInt32("GetAccelerometerData", "FDC76B01153C4666AD2A78CA8E76BD11",
                            CharacteristicPermission.Read,
                            CharacteristicProperty.Read)
-
         let service =
             Service(Name,
                     uuid,
@@ -69,7 +64,6 @@ type MeadowApp() =
                     startBlinkCharacteristic,
                     startRunningColorsCharacteristic,
                     readAngleCharacteristic)
-            
         [| service :> IService |]
 
     override this.Initialize() =
@@ -79,23 +73,13 @@ type MeadowApp() =
         bleTreeDefinition <- Definition("MeadowRGB", this.GetDefinition())
         MeadowApp.Device.BluetoothAdapter.StartBluetoothServer(bleTreeDefinition) |> ignore
 
-        if bleTreeDefinition = null then
-            Resolver.Log.Error("Bluetooth tree definition is null.")
-            ()
-        else
-            Resolver.Log.Info("Bluetooth is ready")
-
-
         let servicesArray = bleTreeDefinition.Services
-        if servicesArray.Count = 0 then
-            Resolver.Log.Error("Bluetooth tree definition has no services.")
-        else
-            let service = servicesArray.[0] :?> Service
-            On <- service.Characteristics.[0]
-            Off <- service.Characteristics.[1]
-            StartBlink <- service.Characteristics.[2]
-            StartRunningColors <- service.Characteristics.[3]
-            ReadAngle <- service.Characteristics.[4]
+        let service = servicesArray.[0] :?> Service
+        On <- service.Characteristics.[0]
+        Off <- service.Characteristics.[1]
+        StartBlink <- service.Characteristics.[2]
+        StartRunningColors <- service.Characteristics.[3]
+        ReadAngle <- service.Characteristics.[4]
 
         
         On.add_ValueSet(fun (sender : ICharacteristic) (newValue : obj) ->
@@ -128,14 +112,10 @@ type MeadowApp() =
             sender.SetValue(bytes)
         )
 
-
         Resolver.Log.Info("Initialize Accelerometer...")
-        
         let i2cBus = MeadowApp.Device.CreateI2cBus(I2cBusSpeed.Standard)
         Accelerometer <- new Adxl345(i2cBus)
         Accelerometer.SetPowerState(false, false, true, false, Adxl345.Frequencies.OneHz)
-
-     
 
         base.Initialize()
 
