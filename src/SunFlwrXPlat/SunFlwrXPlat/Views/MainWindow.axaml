@@ -1,16 +1,58 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
-        Width="400"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="650"
         x:Class="SunFlwrXPlat.Views.MainWindow"        
         Icon="/Assets/avalonia-logo.ico"
         xmlns:vm="using:SunFlwrXPlat.ViewModels"
         Design.DataContext="{Binding Source={x:Static vm:MainViewModel.designVM}}"
         Content="{Binding ContentVM}"
-        Title="AvaloniaXPlatExample">
+        Title="Sun Follower / Sun Flower">
+	<Window.Styles>
+        <Style Selector="Button.tab">
+			<Setter Property="Height" Value="120"/>
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+		</Style>
+		<Style Selector="StackPanel.nav">
+			<Setter Property="Background" Value="#2B579A"/>
+		</Style>
+		<Style Selector="Button.tab">
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="Height" Value="34"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Background" Value="#2B579A"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Margin" Value="0 0 0 0"/>
+			<Setter Property="Padding" Value="10 0"/>
+		</Style>
+		<Style Selector="Button.tab:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#4C90CD"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
 
-    <!-- Content is resolved via the ViewLocator -->
-    
+		<Style Selector="Button.tab:focus">
+			<Setter Property="Background" Value="#4C90CD"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Margin" Value="0 0 0 0"/>
+			<Setter Property="Padding" Value="10 0"/>
+		</Style>
+		<Style Selector="Button.tab:focus /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#4C90CD"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+
+		<Style Selector="Button.tab:selected">
+			<Setter Property="Background" Value="#4C90CD"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Margin" Value="0 0 0 0"/>
+			<Setter Property="Padding" Value="10 0"/>
+		</Style>
+		<Style Selector="Button.tab:selected /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="White"/>
+		</Style>
+		<Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#2B579A" />
+		</Style>
+	</Window.Styles>
 </Window>

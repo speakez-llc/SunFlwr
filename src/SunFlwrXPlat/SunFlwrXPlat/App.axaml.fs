@@ -1,9 +1,9 @@
 namespace SunFlwrXPlat
 
 open Avalonia
-open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Markup.Xaml
 open SunFlwrXPlat.Views
+open Avalonia.Controls.ApplicationLifetimes
 
 type App() =
     inherit Application()
@@ -16,11 +16,23 @@ type App() =
 
     override this.OnFrameworkInitializationCompleted() =
         match this.ApplicationLifetime with
-        | :? IClassicDesktopStyleApplicationLifetime as desktop ->         
-            let view = MainView()
+        | :? IClassicDesktopStyleApplicationLifetime as desktop ->
+            let view = MainWindow()
             desktop.MainWindow <- view
-            ViewModels.MainViewModel.vm.StartElmishLoop(view)
-        | _ -> 
+            try
+                ViewModels.MainViewModel.vm.StartElmishLoop(view)
+            with x ->
+                printfn $"Exception: {x.Message} \n {x.StackTrace}"
+        | :? ISingleViewApplicationLifetime as singleViewLifetime ->
+            try
+                let view = MainView()
+                singleViewLifetime.MainView <- view
+                let x = ViewModels.MainViewModel.vm
+                x.StartElmishLoop(view)
+            with x ->
+                printfn $"Exception: {x.Message} \n {x.StackTrace}"
+
+        | _ ->
             // leave this here for design view re-renders
             ()
 

@@ -1,6 +1,5 @@
 module SunFlwrXPlat.ViewModels.AboutViewModel
 
-open System
 open Elmish.Avalonia
 open Elmish
 open Messaging

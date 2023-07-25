@@ -8,7 +8,7 @@ open Avalonia.Android
 open SunFlwrXPlat
 
 [<Activity(
-    Label = "SunFlwrXPlat.Android",
+    Label = "Sun Follower / Sun Flower",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,
