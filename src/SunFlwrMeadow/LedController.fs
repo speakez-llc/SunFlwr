@@ -26,7 +26,7 @@ type LedController(rgbLed: RgbLed) =
         resetCancellationTokenSource()
 
     member private this.Initialize () =
-        rgbLed.SetColor(RgbLedColors.White)
+        rgbLed.SetColor(RgbLedColors.Yellow)
         rgbLed.IsOn <- true
         stop()
 

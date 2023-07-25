@@ -30,6 +30,7 @@ type MeadowApp() =
     let mutable Off = Unchecked.defaultof<ICharacteristic>
     let mutable StartBlink = Unchecked.defaultof<ICharacteristic>
     let mutable StartRunningColors = Unchecked.defaultof<ICharacteristic>
+    let mutable ReadAngle = Unchecked.defaultof<ICharacteristic>
           
     member private this.GetDefinition() =
         let Name = "MeadowRGB"
@@ -37,25 +38,28 @@ type MeadowApp() =
         let onCharacteristic =
             CharacteristicInt32("On", 
                             "73cfbc6f61fa4d80a92feec2a90f8a3e",
-                            CharacteristicPermission.Read ||| CharacteristicPermission.Write,
-                            CharacteristicProperty.Read ||| CharacteristicProperty.Write,
-                            [||])
+                            CharacteristicPermission.Write,
+                            CharacteristicProperty.Write)
 
         let offCharacteristic =
             CharacteristicBool("Off", "6315119dd61949bba21def9e99941948",
-                           CharacteristicPermission.Read ||| CharacteristicPermission.Write,
-                           CharacteristicProperty.Read ||| CharacteristicProperty.Write)
+                           CharacteristicPermission.Write,
+                           CharacteristicProperty.Write)
 
         let startBlinkCharacteristic =
             CharacteristicInt32("StartBlink", "3a6cc4f2a6ab4709a9bfc9611c6bf892",
-                           CharacteristicPermission.Read ||| CharacteristicPermission.Write,
-                           CharacteristicProperty.Read ||| CharacteristicProperty.Write,
-                           [||])
+                           CharacteristicPermission.Write,
+                           CharacteristicProperty.Write)
 
         let startRunningColorsCharacteristic =
             CharacteristicBool("StartRunningColors", "30df1258f42b4788af2ea8ed9d0b932f",
-                           CharacteristicPermission.Read ||| CharacteristicPermission.Write,
-                           CharacteristicProperty.Read ||| CharacteristicProperty.Write)
+                           CharacteristicPermission.Write,
+                           CharacteristicProperty.Write)
+
+        let readAngleCharacteristic =
+            CharacteristicInt32("GetAccelerometerData", "FDC76B01153C4666AD2A78CA8E76BD11",
+                           CharacteristicPermission.Read,
+                           CharacteristicProperty.Read)
 
         let service =
             Service(Name,
@@ -63,7 +67,8 @@ type MeadowApp() =
                     onCharacteristic,
                     offCharacteristic,
                     startBlinkCharacteristic,
-                    startRunningColorsCharacteristic)
+                    startRunningColorsCharacteristic,
+                    readAngleCharacteristic)
             
         [| service :> IService |]
 
@@ -90,6 +95,7 @@ type MeadowApp() =
             Off <- service.Characteristics.[1]
             StartBlink <- service.Characteristics.[2]
             StartRunningColors <- service.Characteristics.[3]
+            ReadAngle <- service.Characteristics.[4]
 
         
         On.add_ValueSet(fun (sender : ICharacteristic) (newValue : obj) ->
@@ -105,24 +111,29 @@ type MeadowApp() =
         )
         Off.add_ValueSet(fun sender args -> ledController.TurnOff())
         StartBlink.add_ValueSet(fun (sender : ICharacteristic) (newValue : obj) ->
-                   match newValue with
-                   | :? int as 0 -> ledController.StartBlink(Some RgbLedColors.Red)
-                   | :? int as 1 -> ledController.StartBlink(Some RgbLedColors.Green)
-                   | :? int as 2 -> ledController.StartBlink(Some RgbLedColors.Blue)
-                   | :? int as 3 -> ledController.StartBlink(Some RgbLedColors.Cyan)
-                   | :? int as 4 -> ledController.StartBlink(Some RgbLedColors.Magenta)
-                   | :? int as 5 -> ledController.StartBlink(Some RgbLedColors.Yellow)
-                   | :? int as 6 -> ledController.StartBlink(Some RgbLedColors.White)
-                   | _ -> ledController.StartBlink(None) 
-               )
+            match newValue with
+            | :? int as 0 -> ledController.StartBlink(Some RgbLedColors.Red)
+            | :? int as 1 -> ledController.StartBlink(Some RgbLedColors.Green)
+            | :? int as 2 -> ledController.StartBlink(Some RgbLedColors.Blue)
+            | :? int as 3 -> ledController.StartBlink(Some RgbLedColors.Cyan)
+            | :? int as 4 -> ledController.StartBlink(Some RgbLedColors.Magenta)
+            | :? int as 5 -> ledController.StartBlink(Some RgbLedColors.Yellow)
+            | :? int as 6 -> ledController.StartBlink(Some RgbLedColors.White)
+            | _ -> ledController.StartBlink(None) 
+        )
         StartRunningColors.add_ValueSet(fun sender args -> ledController.StartRunningColors())
+        ReadAngle.add_ServerValueSet(fun (sender : ICharacteristic) (newValue) ->
+            let data = boardYangle
+            let bytes = BitConverter.GetBytes(data)
+            sender.SetValue(bytes)
+        )
 
 
         Resolver.Log.Info("Initialize Accelerometer...")
         
         let i2cBus = MeadowApp.Device.CreateI2cBus(I2cBusSpeed.Standard)
         Accelerometer <- new Adxl345(i2cBus)
-        Accelerometer.SetPowerState(false, false, true, false, Adxl345.Frequencies.FourHz)
+        Accelerometer.SetPowerState(false, false, true, false, Adxl345.Frequencies.OneHz)
 
      
 
@@ -131,12 +142,12 @@ type MeadowApp() =
     // Override the Run method
     override this.Run() =
         async {
-            do! async { Accelerometer.StartUpdating(TimeSpan.FromMilliseconds(250.0)) }
+            do! async { Accelerometer.StartUpdating(TimeSpan.FromMilliseconds(1000.0)) }
            
             while true do
                 let! result = Async.AwaitTask (Accelerometer.Read())
                 accelerometerData <- result
                 boardYangle <- calculateAccYangle accelerometerData.X accelerometerData.Z - boardYoffset
                 Resolver.Log.Info(sprintf "Y angle: %.1f%%" boardYangle)
-                do! Async.Sleep(TimeSpan.FromMilliseconds(250.0))
+                do! Async.Sleep(TimeSpan.FromMilliseconds(1000.0))
         } |> Async.StartAsTask :> Task
