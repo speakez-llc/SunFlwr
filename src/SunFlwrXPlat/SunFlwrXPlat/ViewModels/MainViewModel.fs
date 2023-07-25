@@ -54,5 +54,9 @@ let vm : IStart =
 
         AvaloniaProgram.mkSimple init update bindings
         |> AvaloniaProgram.withSubscription subscriptions
+        |> AvaloniaProgram.withElmishErrorHandler
+                (fun msg exn ->
+                    printfn $"ElmishErrorHandler: msg={msg}\n{exn.Message}\n{exn.StackTrace}"
+                )
 
     ElmishViewModel(program)
