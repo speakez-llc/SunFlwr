@@ -7,13 +7,21 @@ open SunFlwrXPlat.ViewModels
 
 type ViewLocator() =
     interface IDataTemplate with
-        
+
         member this.Build(data) =
-            let name = data.GetType().FullName.Replace("ViewModel", "View")
+            let t = data.GetType()
+            let viewName = t.FullName.Replace("ViewModels", "Views").Replace("ViewModel", "View")
+            let parts = viewName.Split([|'['; '+'|], StringSplitOptions.RemoveEmptyEntries)
+            let name = parts[1]
             let typ = Type.GetType(name)
             if isNull typ then
-                upcast TextBlock(Text = $"Not Found: %s{name}")
+                upcast TextBlock(Text = sprintf "Not Found: %s" name)
             else
-                downcast Activator.CreateInstance(typ)
+                let vm = data :?> IStart
+                let view = downcast Activator.CreateInstance(typ)
+                vm.StartElmishLoop(view)
+                view
 
-        member this.Match(data) = data :? ViewModelBase
+        member this.Match(data) =
+            data :? IStart
+

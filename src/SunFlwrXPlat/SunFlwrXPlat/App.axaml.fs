@@ -3,21 +3,25 @@ namespace SunFlwrXPlat
 open Avalonia
 open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Markup.Xaml
-open SunFlwrXPlat.ViewModels
 open SunFlwrXPlat.Views
 
 type App() =
     inherit Application()
 
     override this.Initialize() =
-            AvaloniaXamlLoader.Load(this)
+        // Initialize Avalonia controls from NuGet packages:
+        let _ = typeof<Avalonia.Controls.DataGrid>
+
+        AvaloniaXamlLoader.Load(this)
 
     override this.OnFrameworkInitializationCompleted() =
         match this.ApplicationLifetime with
-        | :? IClassicDesktopStyleApplicationLifetime as desktopLifetime ->
-            desktopLifetime.MainWindow <- MainWindow(DataContext = MainViewModel())
-        | :? ISingleViewApplicationLifetime as singleViewLifetime ->
-            singleViewLifetime.MainView <- MainView(DataContext = MainViewModel())
-        | _ -> ()
+        | :? IClassicDesktopStyleApplicationLifetime as desktop ->         
+            let view = MainView()
+            desktop.MainWindow <- view
+            ViewModels.MainViewModel.vm.StartElmishLoop(view)
+        | _ -> 
+            // leave this here for design view re-renders
+            ()
 
         base.OnFrameworkInitializationCompleted()

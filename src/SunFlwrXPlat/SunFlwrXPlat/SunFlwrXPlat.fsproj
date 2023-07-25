@@ -3,7 +3,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
 
@@ -12,21 +12,32 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="ViewModels\ViewModelBase.fs" />
+    <Compile Include="ViewModels\Messaging.fs" />
+    <Compile Include="ViewModels\IElmishViewModels.fs" />
+    <Compile Include="ViewModels\CounterViewModel.fs" />
+    <Compile Include="ViewModels\ChartViewModel.fs" />
+    <Compile Include="ViewModels\AboutViewModel.fs" />
     <Compile Include="ViewModels\MainViewModel.fs" />
-    <Compile Include="Views\MainWindow.axaml.fs" />
+    <Compile Include="Views\AboutView.axaml.fs" />
+    <Compile Include="Views\ChartView.axaml.fs" />
+    <Compile Include="Views\CounterView.axaml.fs" />
     <Compile Include="Views\MainView.axaml.fs" />
-    <Compile Include="ViewLocator.fs" />
+    <Compile Include="Views\MainWindow.axaml.fs" />
     <Compile Include="App.axaml.fs" />
+    <Compile Include="ViewLocator.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.0" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.0" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0" />
     <PackageReference Include="Elmish.Avalonia" Version="1.0.0-alpha-4" />
+    <PackageReference Include="InTheHand.BluetoothLE" Version="4.0.33" />
+    <PackageReference Include="LiveChartsCore" Version="2.0.0-beta.860" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView" Version="2.0.0-beta.860" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-beta.860" />
   </ItemGroup>
 </Project>
