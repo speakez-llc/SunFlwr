@@ -1,9 +1,10 @@
 namespace SunFlwrXPlat
 
 open Avalonia
+open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Markup.Xaml
 open SunFlwrXPlat.Views
-open Avalonia.Controls.ApplicationLifetimes
+open SunFlwrXPlat.ViewModels
 
 type App() =
     inherit Application()
@@ -20,14 +21,14 @@ type App() =
             let view = MainWindow()
             desktop.MainWindow <- view
             try
-                ViewModels.MainViewModel.vm.StartElmishLoop(view)
+                MainViewModel.vm.StartElmishLoop(view)
             with x ->
                 printfn $"Exception: {x.Message} \n {x.StackTrace}"
         | :? ISingleViewApplicationLifetime as singleViewLifetime ->
             try
                 let view = MainView()
                 singleViewLifetime.MainView <- view
-                let x = ViewModels.MainViewModel.vm
+                let x = MainViewModel.vm
                 x.StartElmishLoop(view)
             with x ->
                 printfn $"Exception: {x.Message} \n {x.StackTrace}"
