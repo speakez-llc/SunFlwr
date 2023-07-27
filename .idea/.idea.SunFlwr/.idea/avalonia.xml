@@ -4,6 +4,8 @@
     <option name="projectPerEditor">
       <map>
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/App.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
+        <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Modules/SharedStyles.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
+        <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Modules/Styles.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Styles.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Views/AboutView.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Desktop/SunFlwrXPlat.Desktop.fsproj" />
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Views/ChartView.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Desktop/SunFlwrXPlat.Desktop.fsproj" />
@@ -11,6 +13,7 @@
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Views/MainView.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Desktop/SunFlwrXPlat.Desktop.fsproj" />
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Views/MainWindow.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Desktop/SunFlwrXPlat.Desktop.fsproj" />
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Views/MainWindowold.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
+        <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Views/Styles.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
       </map>
     </option>
   </component>
