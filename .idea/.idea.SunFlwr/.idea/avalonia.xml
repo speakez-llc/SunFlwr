@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/App.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
+        <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Assets/Styles.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Modules/SharedStyles.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Modules/Styles.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
         <entry key="src/SunFlwrXPlat/SunFlwrXPlat/Styles.axaml" value="src/SunFlwrXPlat/SunFlwrXPlat.Browser/SunFlwrXPlat.Browser.fsproj" />
