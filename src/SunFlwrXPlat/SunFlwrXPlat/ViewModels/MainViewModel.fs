@@ -5,7 +5,7 @@ open Elmish.Avalonia
 
 type Model = 
     {
-        ContentVM: IStart
+        ContentVM: IElmishViewModel
     }
 
 type Msg = 
@@ -38,7 +38,7 @@ let bindings() : Binding<Model, Msg> list = [
 let designVM = ViewModel.designInstance (init()) (bindings())
 
 
-let vm : IStart = 
+let vm : IElmishViewModel = 
     let program =
         let subscriptions (model: Model) : Sub<Msg> =
             let messageBusSubscription (dispatch: Msg -> unit) = 

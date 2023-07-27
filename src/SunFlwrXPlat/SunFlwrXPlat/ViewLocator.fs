@@ -17,11 +17,11 @@ type ViewLocator() =
             if isNull typ then
                 upcast TextBlock(Text = sprintf "Not Found: %s" name)
             else
-                let vm = data :?> IStart
+                let vm = data :?> IElmishViewModel
                 let view = downcast Activator.CreateInstance(typ)
                 vm.StartElmishLoop(view)
                 view
 
         member this.Match(data) =
-            data :? IStart
+            data :? IElmishViewModel
 
