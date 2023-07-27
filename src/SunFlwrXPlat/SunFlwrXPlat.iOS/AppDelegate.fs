@@ -2,7 +2,7 @@ namespace SunFlwrXPlat.iOS
 open Foundation
 open Avalonia
 open Avalonia.iOS
-open Avalonia.ReactiveUI
+open Elmish.Avalonia.AppBuilder
 
 // The UIApplicationDelegate for the application. This class is responsible for launching the 
 // User Interface of the application, as well as listening (and optionally responding) to 
@@ -13,4 +13,4 @@ type [<Register("AppDelegate")>] AppDelegate() =
     override _.CustomizeAppBuilder(builder) =
         base.CustomizeAppBuilder(builder)
             .WithInterFont()
-            .UseReactiveUI()
+            .UseElmishBindings()

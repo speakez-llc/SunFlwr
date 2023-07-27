@@ -1,7 +1,7 @@
 open System.Runtime.Versioning
 open Avalonia
 open Avalonia.Browser
-open Avalonia.ReactiveUI
+open Elmish.Avalonia.AppBuilder
 
 open SunFlwrXPlat
 
@@ -19,7 +19,7 @@ module Program =
         task {
             do! (buildAvaloniaApp()
             .WithInterFont()
-            .UseReactiveUI()
+            .UseElmishBindings()
             .StartBrowserAppAsync("out"))
         }
         |> ignore

@@ -3,8 +3,8 @@ namespace SunFlwrXPlat.Android
 open Android.App
 open Android.Content.PM
 open Avalonia
-open Avalonia.ReactiveUI
 open Avalonia.Android
+open Elmish.Avalonia.AppBuilder
 open SunFlwrXPlat
 
 [<Activity(
@@ -19,4 +19,5 @@ type MainActivity() =
     override _.CustomizeAppBuilder(builder) =
         base.CustomizeAppBuilder(builder)
             .WithInterFont()
-            .UseReactiveUI()
+            .UseElmishBindings()
+            

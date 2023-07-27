@@ -1,7 +1,8 @@
 namespace SunFlwrXPlat.Desktop
 open System
 open Avalonia
-open Avalonia.ReactiveUI
+
+open Elmish.Avalonia.AppBuilder
 open SunFlwrXPlat
 
 module Program =
@@ -13,7 +14,7 @@ module Program =
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace(areas = Array.empty)
-            .UseReactiveUI()
+            .UseElmishBindings()
 
     [<EntryPoint; STAThread>]
     let main argv =
