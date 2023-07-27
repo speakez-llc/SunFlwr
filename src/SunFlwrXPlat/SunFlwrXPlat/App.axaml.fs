@@ -3,8 +3,8 @@ namespace SunFlwrXPlat
 open Avalonia
 open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Markup.Xaml
-open SunFlwrXPlat.Views
 open SunFlwrXPlat.ViewModels
+open SunFlwrXPlat.Views
 
 type App() =
     inherit Application()
@@ -17,9 +17,9 @@ type App() =
 
     override this.OnFrameworkInitializationCompleted() =
         match this.ApplicationLifetime with
-        | :? IClassicDesktopStyleApplicationLifetime as desktop ->
+        | :? IClassicDesktopStyleApplicationLifetime as desktopLifetime ->
             let view = MainWindow()
-            desktop.MainWindow <- view
+            desktopLifetime.MainWindow <- view
             try
                 MainViewModel.vm.StartElmishLoop(view)
             with x ->
