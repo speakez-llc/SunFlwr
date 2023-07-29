@@ -11,6 +11,7 @@ type Model =
 type Msg = 
     | ShowCounter
     | ShowChart
+    | ShowBoardAngle
     | ShowAbout
 
 let init() = 
@@ -24,6 +25,8 @@ let update (msg: Msg) (model: Model) =
         { model with ContentVM = CounterViewModel.vm }
     | ShowChart -> 
         { model with ContentVM = ChartViewModel.vm }
+    | ShowBoardAngle -> 
+        { model with ContentVM = AngleViewModel.vm }
     | ShowAbout -> 
         { model with ContentVM = AboutViewModel.vm }
 
@@ -32,6 +35,7 @@ let bindings() : Binding<Model, Msg> list = [
     "ContentVM" |> Binding.oneWay (fun m -> m.ContentVM)
     "ShowCounter" |> Binding.cmd ShowCounter
     "ShowChart" |> Binding.cmd ShowChart
+    "ShowAngle" |> Binding.cmd ShowBoardAngle
     "ShowAbout" |> Binding.cmd ShowAbout
 ]
 
