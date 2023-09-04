@@ -53,9 +53,9 @@ type MeadowApp() =
                            CharacteristicPermission.Write,
                            CharacteristicProperty.Write)
         let readAngleCharacteristic =
-            CharacteristicInt32("GetAccelerometerData", "FDC76B01153C4666AD2A78CA8E76BD11",
+            CharacteristicString("ReadAngle", "FDC76B01153C4666AD2A78CA8E76BD11",
                            CharacteristicPermission.Read,
-                           CharacteristicProperty.Read)
+                           CharacteristicProperty.Read, 8)
         let service =
             Service(Name,
                     uuid,
@@ -106,10 +106,9 @@ type MeadowApp() =
             | _ -> ledController.StartBlink(None) 
         )
         StartRunningColors.add_ValueSet(fun sender args -> ledController.StartRunningColors())
-        ReadAngle.add_ServerValueSet(fun (sender : ICharacteristic) (newValue) ->
-            let data = boardYangle
-            let bytes = BitConverter.GetBytes(data)
-            sender.SetValue(bytes)
+        ReadAngle.add_ServerValueSet(fun (sender : ICharacteristic) ->
+            let stringValue = sprintf "%f" boardYangle
+            sender.SetValue(stringValue)
         )
 
         Resolver.Log.Info("Initialize Accelerometer...")
