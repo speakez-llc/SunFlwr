@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="650"
+             xmlns:vm="using:SunFlwrXPlat.ViewModels"
+             Design.DataContext="{Binding Source={x:Static vm:AngleViewModel.designVM}}"
+             x:Class="SunFlwrXPlat.Views.AngleView">
+    <StackPanel HorizontalAlignment="Center" Margin="10">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>    
+                <TextBlock Grid.Row="0" Text="Bluetooth devices:" FontSize="14" Foreground="Black" />
+            <Grid Grid.Row="1">
+                <Border Grid.Column="0" Width="50" Height="50">
+                    <Button Command="{Binding CmdToggleConnection}" Background="Transparent" CornerRadius="5">
+                        <Grid>
+                            <ProgressBar IsIndeterminate="{Binding IsScanning}" IsVisible="{Binding IsScanning}" />
+                        </Grid>
+                    </Button>
+                </Border>
+
+                <Border Grid.Column="1" Width="50" Height="50" Background="White" />
+                <Border Grid.Column="2" Width="50" Height="50">
+                    <Button Command="{Binding SearchForDevices}" Background="Transparent" CornerRadius="5">
+                        <Image Source="img_search" />
+                    </Button>
+                </Border>
+            </Grid>
+            <TextBlock Grid.Row="2" Text="Current Weather Stats:" Foreground="Black" FontSize="14" Margin="0,5" />
+
+        <Border Grid.Row="3" Background="#23ABE3" Padding="10" CornerRadius="5">
+            <StackPanel Spacing="10" VerticalAlignment="Center">
+                <TextBlock Text="Temperature" FontSize="35" Foreground="White" HorizontalAlignment="Center"
+                           VerticalAlignment="Bottom" />
+
+                <TextBlock Text="{Binding AngleValue}" FontSize="70" Foreground="White" HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+
+                <Button Content="Update" FontSize="14" Command="{Binding CmdGetAngle}" VerticalAlignment="Top"
+                        Foreground="White" Background="#EF7D3B" Margin="0,5,0,0" />
+            </StackPanel>
+        </Border>
+
+        <TextBlock Grid.Row="4" Text="By SpeakEZ LLC" Foreground="Black"
+                   HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+        </Grid>
+    </StackPanel>
+</UserControl>

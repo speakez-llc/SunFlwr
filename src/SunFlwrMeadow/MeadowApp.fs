@@ -58,7 +58,7 @@ type MeadowApp() =
                            CharacteristicPermission.Write,
                            CharacteristicProperty.Write)
         let readAngleCharacteristic =
-            CharacteristicString ("ReadAngle", "FDC76B01153C4666AD2A78CA8E76BD11",
+            CharacteristicInt32("GetAccelerometerData", "FDC76B01153C4666AD2A78CA8E76BD11",
                            CharacteristicPermission.Read,
                            CharacteristicProperty.Read, 8)
         let motorOffCharacteristic =
