@@ -6,6 +6,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Class1.fs" />
+    <None Include="scratches\scratch_5.fsx" />
+    <None Include="scratches\scratch_4.fsx" />
+    <None Include="scratches\scratch_3.fsx" />
     <None Include="scratches\scratch.fsx" />
     <None Include="scratches\scratch_2.fsx" />
   </ItemGroup>

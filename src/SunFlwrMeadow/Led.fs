@@ -11,8 +11,10 @@ type ILedController =
     abstract member StartBlink : unit -> unit
     abstract member StartRunningColors : unit -> unit
 
-type LedController(rgbLed: RgbLed) =
+type Led(rgbLed: RgbLed) =
     let mutable cts = new CancellationTokenSource()
+
+    let lockObj = obj()
 
     let resetCancellationTokenSource () =
         let newCancellationTokenSource = new CancellationTokenSource()
@@ -45,30 +47,36 @@ type LedController(rgbLed: RgbLed) =
         color
 
     member this.TurnOn (color: RgbLedColors option) =
-        match color with
+        lock lockObj (fun () ->
+            match color with
+                | Some color ->
+                    stop()
+                    rgbLed.SetColor(color)
+                    rgbLed.IsOn <- true
+                | None ->
+                    stop()
+                    rgbLed.SetColor(this.getRandomColor())
+                    rgbLed.IsOn <- true
+        )
+
+    member this.TurnOff () =
+        lock lockObj (fun () ->
+            stop()
+            rgbLed.IsOn <- false
+        )
+
+    member this.StartBlink (color: RgbLedColors option) =
+        lock lockObj (fun () ->
+            match color with
             | Some color ->
                 stop()
-                rgbLed.SetColor(color)
+                rgbLed.StartBlink(color) |> ignore
                 rgbLed.IsOn <- true
             | None ->
                 stop()
-                rgbLed.SetColor(this.getRandomColor())
+                rgbLed.StartBlink(this.getRandomColor()) |> ignore
                 rgbLed.IsOn <- true
-
-    member this.TurnOff () =
-        stop()
-        rgbLed.IsOn <- false
-
-    member this.StartBlink (color: RgbLedColors option) =
-        match color with
-        | Some color ->
-            stop()
-            rgbLed.StartBlink(color) |> ignore
-            rgbLed.IsOn <- true
-        | None ->
-            stop()
-            rgbLed.StartBlink(this.getRandomColor()) |> ignore
-            rgbLed.IsOn <- true
+        )
 
     member this.StartRunningColors () =
         async {
@@ -78,6 +86,6 @@ type LedController(rgbLed: RgbLed) =
         } |> Async.StartImmediate
         
     static member Create (rgbLed: RgbLed) =
-        let ledController = LedController(rgbLed)
+        let ledController = Led(rgbLed)
         ledController.Initialize()
         ledController

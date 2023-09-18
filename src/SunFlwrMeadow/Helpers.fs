@@ -1,5 +1,6 @@
 ﻿module Helpers
 
+open System
 open Meadow.Units
 
 // Standard factor to calculate a degree value from the "raw" 
@@ -13,3 +14,7 @@ let radToDeg = 57.29578
 let calculateAccYangle (x: Acceleration) (z: Acceleration) =
     ((atan2 x.MetersPerSecondSquared z.MetersPerSecondSquared + System.Math.PI) * radToDeg) - 180.0
 
+let asyncSleep (milliseconds : int) =
+    async {
+        do! Async.Sleep(TimeSpan.FromMilliseconds(float milliseconds))
+    }

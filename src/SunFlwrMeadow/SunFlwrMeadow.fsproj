@@ -10,16 +10,18 @@
     <None Include="app.config.yaml" />
     <None Include="wifi.config.yaml" />
     <Compile Include="Helpers.fs" />
-    <Compile Include="LedController.fs" />
+    <Compile Include="Config.fs" />
+    <Compile Include="Led.fs" />
     <Compile Include="MeadowApp.fs" />
 
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.1" />
+    <PackageReference Include="FSharp.Control.AsyncSeq" Version="3.2.1" />
     <PackageReference Include="Meadow.F7" Version="*" />
     <PackageReference Include="Meadow.Foundation" Version="*" />
-    <PackageReference Include="Meadow.Foundation.Sensors.Motion.Adxl3xx" Version="1.1.0" />
-    <PackageReference Include="Meadow.Units" Version="1.1.0" />
+    <PackageReference Include="Meadow.Foundation.Motors.Stepper.A4988" Version="1.3.0" />
+    <PackageReference Include="Meadow.Foundation.Sensors.Motion.Adxl3xx" Version="1.3.0" />
+    <PackageReference Include="Meadow.Units" Version="1.3.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="meadow.config.yaml">

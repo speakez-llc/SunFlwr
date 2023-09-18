@@ -97,7 +97,7 @@ let calculateTimeFromAzimuth latitude longitude (date: DateTime) azimuthCompensa
 // Example usage
 let latitude = 35.5951 // Latitude of Asheville, NC
 let longitude = -82.5515 // Longitude of Asheville, NC
-let date = DateTime.Today.AddDays(90.0)
+let date = DateTime.Today.AddDays(0.0)
 
 let maxTime = calculateTimeFromAzimuth latitude longitude date (22.0)
 let solarNoon = calculateSolarNoon latitude longitude date
