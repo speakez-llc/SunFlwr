@@ -120,6 +120,7 @@ type MeadowApp() =
         Resolver.Log.Info("Initialize Accelerometer...")
         Accelerometer <- new Adxl345(i2cBus)
         Accelerometer.SetPowerState(false, false, true, false, Adxl345.Frequencies.TwoHz)
+         
 
         base.Initialize()
 
