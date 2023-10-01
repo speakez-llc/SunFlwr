@@ -1,4 +1,4 @@
-module SunTrckrServer.App
+module SunTrckr.Server
 
 open System
 open System.IO
@@ -57,7 +57,7 @@ let configuration =
         .AddJsonFile("Secrets.json")
         .Build()
 
-let connString = configuration.GetConnectionString("SunTrckerDB_connection")
+let connString = "Server=localhost;Username=postgres;Database=postgres;Password=peanut"
 
 let createDatabase (storeOptions: StoreOptions) =
     storeOptions.CreateDatabasesForTenants(fun c ->
@@ -76,32 +76,37 @@ let createDatabase (storeOptions: StoreOptions) =
     )
 
 [<Measure>] type V  // Voltage in volts
-[<Measure>] type mA // Current in milliamps
+[<Measure>] type A // Current in amperes
 [<Measure>] type W  // Power in watts
     
 type PowerData =
-    {   DeviceId: Guid
+    {   
+        Id: Guid
+        DeviceId: Guid
         SensorAddress: int
         ObsDateTime: DateTime
         Voltage: float<V>
-        Current: float<mA>
+        Current: float<A>
         Power: float<W>
     }
 
 let store = 
     DocumentStore.For(fun opts ->
-        opts.Schema.For<PowerData>() |> ignore // Explicitly register PowerData
+        opts.Connection(connString)  // Specify the connection string
+        opts.Schema.For<PowerData>().Identity(fun x -> x.Id) |> ignore
         opts.AutoCreateSchemaObjects <- AutoCreate.All
     )
-
-
+    
 let jsonPostHandler next (ctx: HttpContext) =
     task {
         let session = ctx.RequestServices.GetService<IDocumentSession>()
+        if isNull session then printfn "Session is null."
         use reader = new StreamReader(ctx.Request.Body)
         let! json = reader.ReadToEndAsync() |> Async.AwaitTask
         let data = JsonConvert.DeserializeObject<PowerData>(json)
-        session.Store(data)
+        let dataWithId = { data with Id = Guid.NewGuid() }
+        printfn "Deserialized data: %A" dataWithId
+        session.Store(dataWithId)
         session.SaveChanges()
         return! text "OK" next ctx
     }
@@ -164,6 +169,8 @@ let configureApp (app : IApplicationBuilder) =
         .UseGiraffe(webApp)
 
 let configureServices (services : IServiceCollection) =
+    services.AddSingleton<IDocumentStore>(store) |> ignore
+    services.AddScoped<IDocumentSession>(fun _ -> store.LightweightSession()) |> ignore
     services.AddCors()    |> ignore
     services.AddGiraffe() |> ignore
 
@@ -175,6 +182,7 @@ let configureLogging (builder : ILoggingBuilder) =
 let main args =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot     = Path.Combine(contentRoot, "WebRoot")
+    
     Host.CreateDefaultBuilder(args)
         .ConfigureWebHostDefaults(
             fun webHostBuilder ->

@@ -1,5 +1,6 @@
 ﻿namespace SunFlwrMeadow
 
+open System
 open System.Threading.Tasks
 open Meadow
 open Meadow.Devices
@@ -8,12 +9,21 @@ open Meadow.Gateways.Bluetooth
 open Meadow.Foundation.Leds
 open Meadow.Foundation.Sensors.Motion
 open Meadow.Foundation.Motors.Stepper
+open Meadow.Foundation.Sensors.Power
 open SunFlwrMeadow.LedController
 open Helpers
+
+[<Measure>] type V  // Voltage in volts
+[<Measure>] type A // Current in amperes
+[<Measure>] type W  // Power in watts
+
+
 
 
 type MeadowApp() =
     inherit App<F7FeatherV2>()
+    
+    let i2cBus = MeadowApp.Device.CreateI2cBus(I2cBusSpeed.Fast)
 
     // set up motion sensor
     let mutable Accelerometer : Adxl345 = null
@@ -22,6 +32,9 @@ type MeadowApp() =
 
     // set up stepper motor
     let mutable a4988 : A4988  = null
+
+    let mutable ina260 = new Ina260(i2cBus, byte 0x40)
+    let mutable ina219 = new Ina260(i2cBus, byte 0x41)
 
     let rgbLed =
         RgbLed(MeadowApp.Device.Pins.OnboardLedRed, MeadowApp.Device.Pins.OnboardLedGreen, MeadowApp.Device.Pins.OnboardLedBlue)
@@ -116,11 +129,19 @@ type MeadowApp() =
         MonitorToggle <- service.Characteristics.[6]
         SetAngle <- service.Characteristics.[7]
 
-        let i2cBus = MeadowApp.Device.CreateI2cBus(I2cBusSpeed.Standard)
         Resolver.Log.Info("Initialize Accelerometer...")
         Accelerometer <- new Adxl345(i2cBus)
         Accelerometer.SetPowerState(false, false, true, false, Adxl345.Frequencies.TwoHz)
-         
+
+
+        // power sensor setup
+        //Resolver.Log.Info "-- INA Sample App ---"
+        //Resolver.Log.Info "Initialize INA260..."
+        //Resolver.Log.Info (sprintf "INA260 Manufacturer: %A" ina260.ManufacturerID)
+        //Resolver.Log.Info (sprintf "INA260 Die: %A" ina260.DieID)
+        //Resolver.Log.Info "Initialize INA219..."
+        //Resolver.Log.Info (sprintf "INA219 Manufacturer: %A" ina219.ManufacturerID)
+        //Resolver.Log.Info (sprintf "INA260 Die: %A" ina219.DieID)
 
         base.Initialize()
 
@@ -135,11 +156,11 @@ type MeadowApp() =
                 let newestAngle = calculateAccYangle result.X result.Z
                 let motorDirection = if newestAngle < angle then RotationDirection.CounterClockwise else RotationDirection.Clockwise
                 let ledColor = if newestAngle < angle then RgbLedColors.Green else RgbLedColors.Cyan
-                let stepDivisor = if newestAngle < 10 then StepDivisor.Divisor_2 else StepDivisor.Divisor_1
-                a4988.RotationSpeedDivisor <- 2
-                a4988.StepDivisor <- stepDivisor
+                //let stepDivisor = if newestAngle < 10 then StepDivisor.Divisor_8 else StepDivisor.Divisor_16
+                a4988.RotationSpeedDivisor <- 4
+                a4988.StepDivisor <- StepDivisor.Divisor_16
                 a4988.Direction <- motorDirection
-                a4988.Rotate(2880f)
+                a4988.Rotate(12.5f)
                 ledController.TurnOn (Some ledColor)
         )
 
@@ -149,7 +170,7 @@ type MeadowApp() =
                 let result = Accelerometer.Read().Result
                 let newestAngle = calculateAccYangle result.X result.Z
                 Resolver.Log.Info(sprintf "Angle: %.1f" newestAngle)
-                if newestAngle <= (angle + 0.5) && newestAngle >= (angle - 0.5) then
+                if newestAngle <= (angle + 0.5) && newestAngle >= (angle - 0.5 ) then
                     continueRotation <- false
                     continueMonitoring <- false
                     Resolver.Log.Info("Angle change completed")
@@ -212,9 +233,44 @@ type MeadowApp() =
                 Resolver.Log.Info(sprintf "Could Not Read Value")
                 ()
         )
-
+        
+        asyncSleep 3000 |> Async.RunSynchronously |> ignore
         let result = Accelerometer.Read().Result
         let initialAngle = calculateAccYangle result.X result.Z
         Resolver.Log.Info(sprintf "Initial Angle at Startup: %.1f" initialAngle)
+
+        //let consumer = ina260.Subscribe(fun result -> 
+        //    let newPowerReading = 
+        //        match result.New with 
+        //        | struct (newwattage, newvoltage, newcurrent) ->
+        //            (Option.ofNullable newwattage, Option.ofNullable newvoltage, Option.ofNullable newcurrent)
+
+        //    match newPowerReading with
+        //    | (Some newWattage, Some newVoltage, Some newCurrent) ->
+        //        let fmt f = sprintf "%.2f" f
+        //        let wattagefloat = newWattage.Milliwatts
+        //        let voltagefloat = newVoltage.Millivolts
+        //        let currentfloat = newCurrent.Milliamps
+        //        Resolver.Log.Info (sprintf "ina260 values: %s mv * %s ma = %s mw" (fmt voltagefloat) (fmt currentfloat) (fmt wattagefloat))
+        //    | _ -> 
+        //        Resolver.Log.Info (sprintf "no joy in power sensor land"))
+
+        //let consumer2 = ina219.Subscribe(fun result ->  
+        //    let newCurrentReading = 
+        //        match result.New with 
+        //        | struct (_, _, newCurrent) ->
+        //            (Option.ofNullable newCurrent)
+
+        //    match newCurrentReading with
+        //    | (Some newCurrent) ->
+        //        let fmt f = sprintf "%.2f" f
+        //        let currentFloat = newCurrent.Milliamps
+        //        Resolver.Log.Info (sprintf "INA219 high side current: %s mA"  (fmt currentFloat))
+        //        | _ -> 
+        //            Resolver.Log.Info (sprintf "NO JOY IN POWER SENSOR LAND"))
+
+
+        //do ina260.StartUpdating(TimeSpan.FromSeconds(2.0))
+        //do ina219.StartUpdating(TimeSpan.FromSeconds(2.0))
 
         base.Run()

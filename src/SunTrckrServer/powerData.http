@@ -1,0 +1,12 @@
+### Sample POST request to add PowerData
+POST http://localhost:5000/powerEvent HTTP/1.1
+Content-Type: application/json
+
+{
+    "DeviceId": "2d8eef31-bcf4-459a-8d44-cf7c7a211a47",
+    "SensorAddress": 1001,
+    "ObsDateTime": "2023-09-20T14:30:00",
+    "Voltage": 22.2,
+    "Current": 2.5,
+    "Power": 55.5
+}

@@ -21,6 +21,7 @@
     <PackageReference Include="Meadow.Foundation" Version="*" />
     <PackageReference Include="Meadow.Foundation.Motors.Stepper.A4988" Version="1.3.0" />
     <PackageReference Include="Meadow.Foundation.Sensors.Motion.Adxl3xx" Version="1.3.0" />
+    <PackageReference Include="Meadow.Foundation.Sensors.Power.Ina260" Version="1.3.0" />
     <PackageReference Include="Meadow.Units" Version="1.3.0" />
   </ItemGroup>
   <ItemGroup>

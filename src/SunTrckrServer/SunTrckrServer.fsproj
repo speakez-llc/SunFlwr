@@ -20,9 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Secrets.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="WebRoot\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <ItemGroup />
 </Project>
