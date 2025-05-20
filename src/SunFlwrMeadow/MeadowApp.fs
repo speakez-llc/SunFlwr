@@ -5,11 +5,13 @@ open System.Threading.Tasks
 open Meadow
 open Meadow.Devices
 open Meadow.Hardware
+open Meadow.Peripherals
 open Meadow.Gateways.Bluetooth
 open Meadow.Foundation.Leds
 open Meadow.Foundation.Sensors.Motion
 open Meadow.Foundation.Motors.Stepper
 open Meadow.Foundation.Sensors.Power
+open Meadow.Peripherals.Leds
 open SunFlwrMeadow.LedController
 open Helpers
 
@@ -37,7 +39,7 @@ type MeadowApp() =
     let mutable ina219 = new Ina260(i2cBus, byte 0x41)
 
     let rgbLed =
-        RgbLed(MeadowApp.Device.Pins.OnboardLedRed, MeadowApp.Device.Pins.OnboardLedGreen, MeadowApp.Device.Pins.OnboardLedBlue)
+        new RgbLed(MeadowApp.Device.Pins.OnboardLedRed, MeadowApp.Device.Pins.OnboardLedGreen, MeadowApp.Device.Pins.OnboardLedBlue)
     
     let mutable ledController = Led.Create(rgbLed)
 
@@ -103,7 +105,7 @@ type MeadowApp() =
     override this.Initialize() =
 
         Resolver.Log.Info("Initialize Motor Driver...")
-        a4988 <- A4988(
+        a4988 <- new A4988(
             step = MeadowApp.Device.Pins.D01,
             direction = MeadowApp.Device.Pins.D00,
             ms1Pin = MeadowApp.Device.Pins.D04,

@@ -4,6 +4,7 @@ open System
 open System.Threading
 open System.Threading.Tasks
 open Meadow.Foundation.Leds
+open Meadow.Peripherals.Leds
 
 type ILedController =
     abstract member TurnOn : unit -> unit
