@@ -16,6 +16,9 @@
 
   </ItemGroup>
   <ItemGroup>
+   <ProjectReference Include="D:\repos\Meadow.Foundation\Source\Meadow.Foundation.Peripherals\Motors.Stepper.TMC2209\Motors.Stepper.TMC2209.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="*" />
     <PackageReference Include="Meadow.F7" Version="*" />
     <PackageReference Include="Meadow.Foundation" Version="*" />

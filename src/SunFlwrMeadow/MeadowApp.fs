@@ -158,11 +158,11 @@ type MeadowApp() =
                 let newestAngle = calculateAccYangle result.X result.Z
                 let motorDirection = if newestAngle < angle then RotationDirection.CounterClockwise else RotationDirection.Clockwise
                 let ledColor = if newestAngle < angle then RgbLedColors.Green else RgbLedColors.Cyan
-                //let stepDivisor = if newestAngle < 10 then StepDivisor.Divisor_8 else StepDivisor.Divisor_16
-                a4988.RotationSpeedDivisor <- 4
-                a4988.StepDivisor <- StepDivisor.Divisor_16
+                let stepDivisor = if newestAngle < 10 then StepDivisor.Divisor_8 else StepDivisor.Divisor_16
+                a4988.RotationSpeedDivisor <- 8
+                a4988.StepDivisor <- stepDivisor
                 a4988.Direction <- motorDirection
-                a4988.Rotate(12.5f)
+                a4988.Rotate(90.0f)
                 ledController.TurnOn (Some ledColor)
         )
 
@@ -172,12 +172,12 @@ type MeadowApp() =
                 let result = Accelerometer.Read().Result
                 let newestAngle = calculateAccYangle result.X result.Z
                 Resolver.Log.Info(sprintf "Angle: %.1f" newestAngle)
-                if newestAngle <= (angle + 0.5) && newestAngle >= (angle - 0.5 ) then
+                if newestAngle <= (angle + 1.0) && newestAngle >= (angle - 1.0 ) then
                     continueRotation <- false
                     continueMonitoring <- false
                     Resolver.Log.Info("Angle change completed")
                     ledController.TurnOff()
-                asyncSleep 500 |> Async.RunSynchronously |> ignore
+                asyncSleep 50 |> Async.RunSynchronously |> ignore
         )
 
         LedOn.add_ValueSet(fun (sender : ICharacteristic) (newValue : obj) ->
@@ -236,7 +236,7 @@ type MeadowApp() =
                 ()
         )
         
-        asyncSleep 3000 |> Async.RunSynchronously |> ignore
+        asyncSleep 2000 |> Async.RunSynchronously |> ignore
         let result = Accelerometer.Read().Result
         let initialAngle = calculateAccYangle result.X result.Z
         Resolver.Log.Info(sprintf "Initial Angle at Startup: %.1f" initialAngle)
